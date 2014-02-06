@@ -43,6 +43,7 @@ namespace PackExplorer
         {
             FileStream fs = File.Open(textBoxPath.Text, FileMode.Open, FileAccess.Read);
             Pack root = new PackGPDA(fs);
+            root.Analyse();
             fs.Close();
         }
     }
