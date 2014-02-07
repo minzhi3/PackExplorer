@@ -18,7 +18,7 @@ namespace PackExplorer
             FileInfo fi = new FileInfo(sm.Name);
             dest_path = fi.DirectoryName;
         }
-        public PackGPDA(Stream sm, Entry e, string dest) : base(sm, e.Offset, e.Size, e.Name) 
+        public PackGPDA(Stream sm, Element e, string dest) : base(sm, e.Offset, e.Size, e.Name) 
         {
             dest_path = dest;
         }
