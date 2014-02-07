@@ -7,30 +7,57 @@ using System.IO;
 
 namespace PackExplorer
 {
-    class Element : Entry
+    class Element
     {
+        public delegate void AnalyseEventHandler(Object sender, AnalyseEventArgs e);
+        public event AnalyseEventHandler analyse;
         protected Stream datastream;
 
+        long offset;
+        long size;
+        string name;
+
+        //construct------------------------------
+        public Element(Stream sm, Int64 offset, Int64 size, string name)
+        {
+            Initial(sm, offset, size, name);
+        }
         public Element(Stream sm)
-            : base(0, sm.Length, "ROOT")
+        {
+            Initial(sm, 0, sm.Length, "ROOT");
+        }
+        private void Initial(Stream sm, Int64 offset, Int64 size, string name)
         {
             datastream = sm;
+            this.offset = offset;
+            this.name = name;
+            this.size = size;
         }
 
-        public Element(Stream sm, Entry e)
-            : base(e.Offset, e.Size, e.Name)
+        //properties-------------------------------
+        public long Offset
         {
-            datastream = sm;
+            get { return offset; }
         }
-        public Element(Stream sm, long offset,long size,string name)
-            :base(offset,size,name)
+        public long Size
         {
-            datastream = sm;
+            get { return size; }
+        }
+        public string Name
+        {
+            get { return name; }
         }
 
+        protected virtual void OnAnalyse(AnalyseEventArgs e)
+        {
+            if (analyse != null)
+            {
+                analyse(this, e);
+            }
+        }
         public void Output(string path)
         {
-            string dest=Path.Combine(path, base.Name);
+            string dest=Path.Combine(path, name);
 
             //auto rename existed file
             string dest_origin = dest;

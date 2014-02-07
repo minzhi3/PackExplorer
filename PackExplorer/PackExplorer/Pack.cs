@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.IO;
 namespace PackExplorer
 {
-    abstract class Pack : Element
+    class Pack : Element
     {
-        protected List<Entry> entries;
+        protected List<Element> entries;
         protected Int64 count;
         public Pack(Stream sm)
             :base(sm)
@@ -18,7 +18,12 @@ namespace PackExplorer
             : base(sm, offset, size, name)
         {
         }
-        public abstract void Analyse();
+
+        public void Extract(string path)
+        {
+            CreateDirectory(path);
+            
+        }
 
         //extract pack
         public string CreateDirectory(string path)
