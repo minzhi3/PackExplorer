@@ -33,11 +33,12 @@ namespace PackExplorer
 
         private void MainForm_DragDrop(object sender, DragEventArgs e)
         {
-            {
-                string[] test = (string[])e.Data.GetData(DataFormats.FileDrop, false);
-                textBoxPath.Text = test[0].ToString();
-                StatusMainForm.Text = "The file has been opened";
-            }
+            string[] test = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            textBoxPath.Text = test[0].ToString();
+            StatusMainForm.Text = "The file has been opened";
+            FileInfo fi = new FileInfo(textBoxPath.Text);
+            textBoxFavorFiles.Text =Path.Combine(fi.DirectoryName,"favor");
+            Element.path_of_favor_files = textBoxFavorFiles.Text;
         }
 
         private void ExportBtn_Click(object sender, EventArgs e)
@@ -67,7 +68,7 @@ namespace PackExplorer
         /// delegate class about export button
         /// </summary>
         /// <param name="enable">ability of button</param>
-        private delegate void ExportButtonEnable(bool enable);
+        private delegate void ExportEnable(bool enable);
         /// <summary>
         /// Show text on status trip
         /// </summary>
@@ -87,11 +88,13 @@ namespace PackExplorer
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new ExportButtonEnable(SetExportButtonEnable), enable);
+                this.Invoke(new ExportEnable(SetExportButtonEnable), enable);
             }
             else
             {
                 this.ExportBtn.Enabled = enable;
+                this.textBoxFavorFiles.Enabled = enable;
+                this.textBoxPath.Enabled = enable;
             }
         }
     }

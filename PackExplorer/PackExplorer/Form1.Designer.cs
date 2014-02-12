@@ -32,6 +32,8 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusMainForm = new System.Windows.Forms.ToolStripStatusLabel();
             this.textBoxPath = new System.Windows.Forms.TextBox();
+            this.textBoxFavorFiles = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,12 +70,30 @@
             this.textBoxPath.Size = new System.Drawing.Size(534, 20);
             this.textBoxPath.TabIndex = 4;
             // 
+            // textBoxFavorFiles
+            // 
+            this.textBoxFavorFiles.Location = new System.Drawing.Point(12, 99);
+            this.textBoxFavorFiles.Name = "textBoxFavorFiles";
+            this.textBoxFavorFiles.Size = new System.Drawing.Size(534, 20);
+            this.textBoxFavorFiles.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(13, 79);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(119, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Location of *.obj.gz files";
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(558, 261);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.textBoxFavorFiles);
             this.Controls.Add(this.textBoxPath);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.ExportBtn);
@@ -95,6 +115,8 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel StatusMainForm;
         private System.Windows.Forms.TextBox textBoxPath;
+        private System.Windows.Forms.TextBox textBoxFavorFiles;
+        private System.Windows.Forms.Label label1;
     }
 }
 

@@ -10,7 +10,7 @@ namespace PackExplorer
     public class Element
     {
         protected Stream datastream;
-
+        public static string path_of_favor_files ="";
         long offset;
         long size;
         string name;
@@ -76,6 +76,7 @@ namespace PackExplorer
             br.BaseStream.Seek(0, SeekOrigin.Begin);
             //Check IDString GPDA
             byte[] head = br.ReadBytes(4);
+            br.BaseStream.Seek(0, SeekOrigin.Begin);
             return head;
         }
     }

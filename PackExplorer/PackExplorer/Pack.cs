@@ -39,7 +39,8 @@ namespace PackExplorer
         /// <param name="ispack">check function of subpack existed</param>
         public void Extract(string path,MainForm.StatusShow showstatus)
         {
-            string dest_path=CreateDirectory(path);
+            string dest = Path.Combine(path, base.Name);
+            string dest_path = CreateDirectory(dest);
             foreach (Element e in elements)
             {
                 if (ispack(e))
@@ -49,20 +50,36 @@ namespace PackExplorer
                 }
                 else
                 {
-                    e.Output(dest_path);
+                    if (e.Name.Contains("obj"))
+                    {
+                        if (!Directory.Exists(Element.path_of_favor_files))
+                            CreateDirectory(Element.path_of_favor_files);
+                        e.Output(Element.path_of_favor_files);
+                    }
+                    else
+                    {
+                        e.Output(dest_path);
+                    }
                 }
                 showstatus(Path.Combine(dest_path, e.Name));
             }
         }
 
-        //extract pack
-        private string CreateDirectory(string path)
+        /// <summary>
+        /// Create the directiory if it is not existed
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private string CreateDirectory(string dest)
         {
-            
-            string dest=Path.Combine(path,base.Name);
 
             //auto rename existed directory
             string dest_origin = dest;
+            if (dest.Contains("favor"))
+            {
+                int k = 1;
+                int j = 2;
+            }
             int i = 1;
             while (Directory.Exists(dest))
             {
