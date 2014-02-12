@@ -7,10 +7,8 @@ using System.IO;
 
 namespace PackExplorer
 {
-    class Element
+    public class Element
     {
-        public delegate void AnalyseEventHandler(Object sender, AnalyseEventArgs e);
-        public event AnalyseEventHandler analyse;
         protected Stream datastream;
 
         long offset;
@@ -52,13 +50,6 @@ namespace PackExplorer
             get { return datastream; }
         }
 
-        protected virtual void OnAnalyse(AnalyseEventArgs e)
-        {
-            if (analyse != null)
-            {
-                analyse(this, e);
-            }
-        }
         public void Output(string path)
         {
             string dest=Path.Combine(path, name);

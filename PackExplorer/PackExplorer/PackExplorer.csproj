@@ -54,7 +54,7 @@
     </Compile>
     <Compile Include="Element.cs" />
     <Compile Include="Pack.cs" />
-    <Compile Include="PackGPDA.cs" />
+    <Compile Include="PackFile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

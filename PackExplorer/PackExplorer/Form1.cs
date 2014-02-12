@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Threading;
 
 namespace PackExplorer
 {
@@ -41,10 +42,57 @@ namespace PackExplorer
 
         private void ExportBtn_Click(object sender, EventArgs e)
         {
-            FileStream fs = File.Open(textBoxPath.Text, FileMode.Open, FileAccess.Read);
-            Pack root = new PackGPDA(fs);
-            root.Analyse();
-            fs.Close();
+            SetExportButtonEnable(false);
+            Thread thread=new Thread(new ThreadStart(ExtractPack));
+            thread.IsBackground=true;
+            thread.Start();
+        }
+        private void ExtractPack()
+        {
+            FileInfo fi = new FileInfo(textBoxPath.Text);
+            PackFile pf = new PackFile(fi);
+            pf.Extract(AnalyseManager.AnalysePackGPDA, AnalyseManager.CheckPackGPDA, new StatusShow(ShowStatus));
+            this.ShowStatus("Complete");
+            SetExportButtonEnable(true);
+            Thread.CurrentThread.Abort();
+        }
+        //--------------Status of mainform-----------
+        /// <summary>
+        /// delegate class about text in status bar
+        /// </summary>
+        /// <param name="status">Text of status</param>
+        public delegate void StatusShow(string status);
+
+        /// <summary>
+        /// delegate class about export button
+        /// </summary>
+        /// <param name="enable">ability of button</param>
+        private delegate void ExportButtonEnable(bool enable);
+        /// <summary>
+        /// Show text on status trip
+        /// </summary>
+        /// <param name="status"></param>
+        private void ShowStatus(string status)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new StatusShow(ShowStatus),status);
+            }
+            else
+            {
+                this.StatusMainForm.Text=status;
+            }
+        }
+        private void SetExportButtonEnable(bool enable)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new ExportButtonEnable(SetExportButtonEnable), enable);
+            }
+            else
+            {
+                this.ExportBtn.Enabled = enable;
+            }
         }
     }
 }

@@ -19,6 +19,9 @@ namespace PackExplorer
             this.name = name;
         }
     }
+    /// <summary>
+    /// Extracting Algorithm Mehtods
+    /// </summary>
     public class AnalyseManager
     {
         static byte[] Idstring = Encoding.ASCII.GetBytes("GPDA");
@@ -59,15 +62,15 @@ namespace PackExplorer
                 //Debug.WriteLine(entries[i].Name);
             }
 
-            foreach (Entry en in entries)
+            foreach (Entry suben in entries)
             {
-                byte[] buf = new byte[en.size];
+                byte[] buf = new byte[suben.size];
 
-                br.BaseStream.Seek(e.Offset, SeekOrigin.Begin);
-                br.Read(buf, 0, (int)e.Size);
+                br.BaseStream.Seek(suben.offset, SeekOrigin.Begin);
+                br.Read(buf, 0, (int)suben.size);
 
                 MemoryStream ms = new MemoryStream(buf);
-                ret.Add(new Element(ms, en.offset, en.size, en.name));
+                ret.Add(new Element(ms, suben.offset, suben.size, suben.name));
 
             }
             return ret;
