@@ -6,29 +6,32 @@ using System.Threading.Tasks;
 using System.IO;
 namespace PackExplorer
 {
+    public delegate bool CheckType(Element e);
+    public delegate List<Element> AnalysePack(Element e);
     public class Pack : Element
     {
-        public delegate bool CheckPack(Element e);
-        public delegate List<Element> AnalysePack(Element e);
 
-        AnalysePack ap;
-        CheckPack ispack;
+        AnalysePack pack_algo;
+        CheckType ispack, iscompress;
+        AnalyseCompress comp_algo;
         protected List<Element> elements;
         protected Int64 count;
-        public Pack(Element e, AnalysePack ap,CheckPack ispack)
+        public Pack(Element e, AnalysePack ap,CheckType ispa,AnalyseCompress ac,CheckType iscp)
             :base(e.Data,e.Offset,e.Size,e.Name)
         {
-            Initial(ap,ispack);
+            Initial(ap,ispa,ac,iscp);
         }
         //public Pack(Stream sm,long offset,long size,string name)
         //    : base(sm, offset, size, name)
         //{
         //    Initial(ap);
         //}
-        private void Initial(AnalysePack ap, CheckPack ispack)
+        private void Initial(AnalysePack ap, CheckType ispack, AnalyseCompress ac, CheckType iscp)
         {
-            this.ap = ap;
+            this.pack_algo = ap;
             this.ispack = ispack;
+            this.iscompress = iscp;
+            this.comp_algo = ac;
             elements=ap((Element)base.MemberwiseClone());
 
         }
@@ -44,12 +47,19 @@ namespace PackExplorer
             {
                 if (ispack(e))
                 {
-                    Pack p=new Pack(e,ap,ispack);
+                    Pack p=new Pack(e,pack_algo,ispack,comp_algo,iscompress);
                     p.Extract(dest_path, showstatus);
                 }
                 else
                 {
-                    e.Output(dest_path);
+                    if (iscompress(e))
+                    {
+                        e.Output(dest_path, iscompress, comp_algo);
+                    }
+                    else
+                    {
+                        e.Output(dest_path);
+                    }
                 }
                 showstatus(Path.Combine(dest_path, e.Name));
             }

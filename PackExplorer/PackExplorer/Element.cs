@@ -7,6 +7,7 @@ using System.IO;
 
 namespace PackExplorer
 {
+    public delegate Element AnalyseCompress(Element e);
     public class Element
     {
         protected Stream datastream;
@@ -50,7 +51,7 @@ namespace PackExplorer
             get { return datastream; }
         }
 
-        public void Output(string path)
+        public void Output(string path, CheckType iscompress=null, AnalyseCompress comp_algo=null)
         {
             string dest=Path.Combine(path, name);
 
@@ -63,19 +64,31 @@ namespace PackExplorer
                 i++;
             }
             FileStream fso = File.Create(dest);
-            datastream.CopyTo(fso);
+            if (comp_algo == null)
+            {
+                datastream.CopyTo(fso);
+            }
+            else
+            {
+                if (iscompress(this))
+                {
+                    Element e = comp_algo(this);
+                    e.Data.Seek(0, SeekOrigin.Begin);
+                    e.Data.CopyTo(fso);
+                }
+            }
             fso.Close();
         }
         /// <summary>
         /// Get 4 bytes in head of stream
         /// </summary>
         /// <returns></returns>
-        public byte[] Get4Bytes()  
+        public byte[] GetHeadBytes(int count)  
         {
             BinaryReader br = new BinaryReader(datastream); //file stream
             br.BaseStream.Seek(0, SeekOrigin.Begin);
             //Check IDString GPDA
-            byte[] head = br.ReadBytes(4);
+            byte[] head = br.ReadBytes(count);
             br.BaseStream.Seek(0, SeekOrigin.Begin);
             return head;
         }

@@ -28,7 +28,7 @@ namespace PackExplorer
         {
             packfile = fi;
         }
-        public void Extract(Pack.AnalysePack analyse_algo, Pack.CheckPack check_algo,MainForm.StatusShow showstatus)
+        public void Extract(AnalysePack analyse_algo, CheckType check_algo,AnalyseCompress comp_algo,CheckType iscompress,MainForm.StatusShow showstatus)
         {
             //Extracting start
             FileStream fs = File.Open(packfile.FullName, FileMode.Open, FileAccess.Read);
@@ -42,7 +42,7 @@ namespace PackExplorer
             }
             else
             {
-                pack = new Pack(e, analyse_algo, check_algo);
+                pack = new Pack(e, analyse_algo, check_algo,comp_algo,iscompress);
                 pack.Extract(packfile.DirectoryName, showstatus);
             }
 

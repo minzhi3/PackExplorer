@@ -51,7 +51,12 @@ namespace PackExplorer
         {
             FileInfo fi = new FileInfo(textBoxPath.Text);
             PackFile pf = new PackFile(fi);
-            pf.Extract(AnalyseManager.AnalysePackGPDA, AnalyseManager.CheckPackGPDA, new StatusShow(ShowStatus));
+            pf.Extract(
+                AnalyseManager.AnalysePackGPDA,
+                AnalyseManager.CheckPackGPDA, 
+                AnalyseManager.UncompressGzip,
+                AnalyseManager.CheckGzip,
+                new StatusShow(ShowStatus));
             this.ShowStatus("Complete");
             SetExportButtonEnable(true);
             Thread.CurrentThread.Abort();

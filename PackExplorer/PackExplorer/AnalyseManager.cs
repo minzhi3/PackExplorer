@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-
+using System.IO.Compression;
 namespace PackExplorer
 {
     public struct Entry
@@ -25,6 +25,7 @@ namespace PackExplorer
     public class AnalyseManager
     {
         static byte[] Idstring = Encoding.ASCII.GetBytes("GPDA");
+        static byte[] Gzip = { 0x1f, 0x8b };
         public static List<Element> AnalysePackGPDA(Element e)
         {
             BinaryReader br = new BinaryReader(e.Data); //file stream
@@ -85,7 +86,7 @@ namespace PackExplorer
         /// <returns></returns>
         public static bool CheckPackGPDA(Element e)
         {
-            byte[] chk = e.Get4Bytes();
+            byte[] chk = e.GetHeadBytes(4);
             for (int i = 0; i < 3; i++)
             {
                 if (chk[i] != Idstring[i])
@@ -94,6 +95,26 @@ namespace PackExplorer
                 }
             }
             return true;
+        }
+        public static Element UncompressGzip(Element e)
+        {
+            byte[] buf=new byte[0x100];
+            GZipStream gz = new GZipStream(e.Data, CompressionMode.Decompress);
+            MemoryStream ms = new MemoryStream();
+            int length;
+            while ((length=gz.Read(buf,0,buf.Length))!=0)
+            {
+                ms.Write(buf, 0, length);
+            }
+            return new Element(ms, 0, ms.Length, e.Name);
+        }
+        public static bool CheckGzip(Element e)
+        {
+            byte[] chk = e.GetHeadBytes(2);
+            if (chk[0] == Gzip[0] && chk[1] == Gzip[1])
+                return true;
+            else
+                return false;
         }
     }
 }
