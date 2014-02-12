@@ -35,6 +35,9 @@ namespace PackExplorer
             {
                 throw new Exception("Not a GPDA pack");
             }
+            //Jump the head
+            br.ReadInt32();
+
             //File size
             if (e.Size != br.ReadInt64())
             {

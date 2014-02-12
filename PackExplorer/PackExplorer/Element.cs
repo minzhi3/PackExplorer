@@ -76,6 +76,7 @@ namespace PackExplorer
             br.BaseStream.Seek(0, SeekOrigin.Begin);
             //Check IDString GPDA
             byte[] head = br.ReadBytes(4);
+            br.BaseStream.Seek(0, SeekOrigin.Begin);
             return head;
         }
     }
